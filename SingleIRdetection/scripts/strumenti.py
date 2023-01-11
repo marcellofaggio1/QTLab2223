@@ -6,19 +6,19 @@ import time
 
 #classe per controllo Kelvinox
 
-class fridge_handler:
+class FridgeHandler:
     def __init__(self):
         self.inst = pyvisa.ResourceManager().open_resource('ASRL1::INSTR')
   
-    def Execute(self, cmd):
+    def execute(self, cmd):
         self.inst.write('$'+ str(cmd))
 
-    def Read(self, cmd):
+    def read(self, cmd):
         out = self.inst.query_ascii_values(str(cmd), converter='s')
         out = str.rstrip(out[0])
         print(out)
 
-    def ScanT(self, cmd, interval, time):       # cmd -> command that specifies which temperature,
+    def scan_t(self, cmd, interval, time):       # cmd -> command that specifies which temperature,
                                                 # interval -> time step to perform control
                                                 # time -> total time of the scansion
         '''Temperature scansion that prints the values every "interval" seconds for a "time" time'''
@@ -33,7 +33,7 @@ class fridge_handler:
             print('Temperature at step ' + i + ' is ' + out)
         return Temps
 
-    def CheckTempStab(self, cmd, interval, time, CentralTemp, sigma ):     # same par.s as ScanT + 
+    def check_temp_stabilty(self, cmd, interval, time, CentralTemp, sigma ):     # same par.s as ScanT + 
                                                                         # CentralTemp -> Temperature
                                                                         # sigma -> half range of confidence
         ''''Check of Temperature stability making scansions until the Temperature is stable'''
@@ -52,12 +52,12 @@ class fridge_handler:
     #    '''Set the temperature to one of the allowed values (does so supplying power to the Mixing chamber)'''
     #    self.inst.write()
 
-    def State(self):
+    def state(self):
         out = self.inst.query_ascii_values('X', converter='s')
         out = str.rstrip(out[0])
         print(out)
     
-    def SetT(self, T):
+    def set_t(self, T):
         '''Set temperature to arbitrary value in 0.1 mK. 
         Be careful! The value of temp has to be specified with 5 figures!
         Range is the command name for the power range (E1, E2 ...)'''
@@ -74,5 +74,5 @@ class fridge_handler:
         else:
             cmd+='5'
 
-        self.Execute(cmd)
-        self.Execute('T' + str(10*T))
+        self.execute(cmd)
+        self.execute('T' + str(10*T))
