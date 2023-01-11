@@ -39,7 +39,7 @@ class FridgeHandler:
         ''''Check of Temperature stability making scansions until the Temperature is stable'''
         i = 0
         while i == 0:
-            Temp = ScanT(self, cmd, interval, time)
+            Temp = scan_t(self, cmd, interval, time)
             for k in range(len(Temp)):
                 if Temp[k] < CentralTemp - sigma or Temp[k] > CentralTemp + sigma:
                     i = 0
